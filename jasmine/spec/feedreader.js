@@ -31,9 +31,10 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-        it('URLs are defined', function() {
+        it('URLs are defined and not empty', function() {
             allFeeds.forEach(feed => {
-                expect(feed.url).not.toBe(0);
+                expect(feed.url).toBeDefined();
+                expect(feed.url).not.toBe('');
             });
         });
 
@@ -42,9 +43,10 @@ $(function() {
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-        it('Names are defined', function() {
+        it('Names are defined and not empty', function() {
             allFeeds.forEach(feed => {
-                expect(feed.name).not.toBe(0);
+                expect(feed.name).toBeDefined();
+                expect(feed.name).not.toBe('');
             });
         });
     });
@@ -75,9 +77,7 @@ $(function() {
     describe('Initial Entries', function() {
         
         beforeEach(function(done) {
-           loadFeed(0, function() {
-               done();
-            });
+           loadFeed(0, done);
         });
            
         /* test that ensures when the loadFeed
@@ -85,7 +85,7 @@ $(function() {
          * a single .entry element within the .feed container.
          */
         it('have at least one entry', function(done) {
-            expect($('.feed')[0].children.length).toBeGreaterThan(0);
+            expect($('.feed .entry').length).toBeGreaterThan(0);
             done();
         });
     });
@@ -98,12 +98,12 @@ $(function() {
         beforeEach(function(done) {
             loadFeed(0, function() {
                 InitialFeed = document.querySelector(".feed").innerHTML;
-                done();
+                loadFeed(1, function() {
+                    newFeed = document.querySelector(".feed").innerHTML;
+                    done();
+                });
             });
-            loadFeed(2, function() {
-                newFeed = document.querySelector(".feed").innerHTML;
-                done();
-            });
+            
         });
         /* test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
